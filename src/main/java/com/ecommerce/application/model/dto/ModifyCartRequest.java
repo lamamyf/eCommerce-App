@@ -1,4 +1,4 @@
-package com.ecommerce.application.model.requests;
+package com.ecommerce.application.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

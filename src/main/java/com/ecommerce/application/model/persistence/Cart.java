@@ -4,16 +4,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "cart")
@@ -21,21 +14,18 @@ public class Cart {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@JsonProperty
 	@Column
 	private Long id;
 	
 	@ManyToMany
-	@JsonProperty
 	@Column
     private List<Item> items;
 	
 	@OneToOne(mappedBy = "cart")
-	@JsonProperty
+	@JsonIgnore
     private User user;
 	
 	@Column
-	@JsonProperty
 	private BigDecimal total;
 	
 	public BigDecimal getTotal() {

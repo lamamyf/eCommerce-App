@@ -1,6 +1,7 @@
 package com.ecommerce.application.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.ecommerce.application.model.persistence.User;
 import com.ecommerce.application.model.persistence.UserOrder;
@@ -29,21 +30,21 @@ public class OrderController {
 	
 	@PostMapping("/submit/{username}")
 	public ResponseEntity<UserOrder> submit(@PathVariable String username) {
-		User user = userRepository.findByUsername(username);
-		if(user == null) {
+		Optional<User> user = userRepository.findByUsername(username);
+		if(user.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
-		UserOrder order = UserOrder.createFromCart(user.getCart());
+		UserOrder order = UserOrder.createFromCart(user.get().getCart());
 		orderRepository.save(order);
 		return ResponseEntity.ok(order);
 	}
 	
 	@GetMapping("/history/{username}")
 	public ResponseEntity<List<UserOrder>> getOrdersForUser(@PathVariable String username) {
-		User user = userRepository.findByUsername(username);
-		if(user == null) {
+		Optional<User> user = userRepository.findByUsername(username);
+		if(user.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.ok(orderRepository.findByUser(user));
+		return ResponseEntity.ok(orderRepository.findByUser(user.get()));
 	}
 }
