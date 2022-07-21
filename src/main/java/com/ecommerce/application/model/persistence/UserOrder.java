@@ -15,29 +15,23 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 @Entity
 @Table(name = "user_order")
 public class UserOrder {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@JsonProperty
 	@Column
 	private Long id;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
-	@JsonProperty
 	@Column
     private List<Item> items;
 	
 	@ManyToOne
 	@JoinColumn(name="user_id", nullable = false, referencedColumnName = "id")
-	@JsonProperty
     private User user;
-	
-	@JsonProperty
+
 	@Column
 	private BigDecimal total;
 

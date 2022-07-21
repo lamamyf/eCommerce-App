@@ -1,11 +1,11 @@
 package com.ecommerce.application.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
-import com.ecommerce.application.model.persistence.User;
+import com.ecommerce.application.model.dto.OrderResponse;
 import com.ecommerce.application.model.persistence.UserOrder;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ecommerce.application.service.OrderService;
+import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,38 +13,34 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ecommerce.application.model.persistence.repositories.OrderRepository;
-import com.ecommerce.application.model.persistence.repositories.UserRepository;
-
 @RestController
 @RequestMapping("/api/order")
 public class OrderController {
 	
-	
-	@Autowired
-	private UserRepository userRepository;
-	
-	@Autowired
-	private OrderRepository orderRepository;
-	
-	
+	private final OrderService orderService;
+	private final SpelAwareProxyProjectionFactory projectionFactory;
+
+	public OrderController(OrderService orderService, SpelAwareProxyProjectionFactory projectionFactory) {
+		this.orderService = orderService;
+		this.projectionFactory = projectionFactory;
+	}
+
 	@PostMapping("/submit/{username}")
-	public ResponseEntity<UserOrder> submit(@PathVariable String username) {
-		Optional<User> user = userRepository.findByUsername(username);
-		if(user.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
-		UserOrder order = UserOrder.createFromCart(user.get().getCart());
-		orderRepository.save(order);
-		return ResponseEntity.ok(order);
+	public ResponseEntity<OrderResponse> submit(@PathVariable String username) {
+		var order = orderService.submit(username);
+		return order.isPresent() ? ResponseEntity.ok(toOrderResponse(order.get())) : ResponseEntity.badRequest().build();
 	}
 	
 	@GetMapping("/history/{username}")
-	public ResponseEntity<List<UserOrder>> getOrdersForUser(@PathVariable String username) {
-		Optional<User> user = userRepository.findByUsername(username);
-		if(user.isEmpty()) {
+	public ResponseEntity<List<OrderResponse>> getOrdersForUser(@PathVariable String username) {
+		var orders = orderService.findByUsername(username);
+		if(orders.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.ok(orderRepository.findByUser(user.get()));
+		return ResponseEntity.ok(orders.get().stream().map(this::toOrderResponse).toList());
+	}
+
+	private OrderResponse toOrderResponse(UserOrder order){
+		return projectionFactory.createProjection(OrderResponse.class, order);
 	}
 }
