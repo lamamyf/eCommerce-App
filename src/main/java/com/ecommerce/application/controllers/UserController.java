@@ -5,6 +5,8 @@ import com.ecommerce.application.model.dto.UserCreationResponse;
 import com.ecommerce.application.model.persistence.User;
 import com.ecommerce.application.model.dto.CreateUserRequest;
 import com.ecommerce.application.service.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +24,8 @@ public class UserController {
 
 	private final UserService userService;
 	private final SpelAwareProxyProjectionFactory projectionFactory;
+
+	private static final Logger log = LogManager.getLogger(UserController.class);
 
 	public UserController(UserService userService, SpelAwareProxyProjectionFactory projectionFactory) {
 		this.userService = userService;
@@ -42,10 +46,13 @@ public class UserController {
 
 	@PostMapping("/create")
 	public ResponseEntity<UserCreationResponse> createUser(@RequestBody CreateUserRequest request) {
-		if(request.password().length() < 7 ){
+		if(!request.password().equals(request.confirmPassword()) || request.password().length() < 7 ){
+			log.error("User {} Not Created because of invalid password", request.username());
 			return ResponseEntity.badRequest().build();
 		}
+
 		User user = userService.create(request.username(), request.password());
+		log.info("New User: {}.", request.username());
 		return ResponseEntity.ok(toUserResponse(user));
 	}
 

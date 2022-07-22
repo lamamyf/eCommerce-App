@@ -4,6 +4,8 @@ import com.ecommerce.application.model.persistence.Cart;
 import com.ecommerce.application.model.persistence.User;
 import com.ecommerce.application.model.persistence.repositories.CartRepository;
 import com.ecommerce.application.model.persistence.repositories.UserRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,6 +22,8 @@ public class UserService implements UserDetailsService {
     private final CartRepository cartRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    private static final Logger log = LogManager.getLogger(UserService.class);
+
     public UserService(UserRepository userRepository, CartRepository cartRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.cartRepository = cartRepository;
@@ -29,7 +33,10 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(username));
+                .orElseThrow(() -> {
+                    log.error("user not found for given username {}", username);
+                    return new UsernameNotFoundException(username);
+                });
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), Collections.emptyList());
     }
