@@ -23,13 +23,10 @@ import java.util.Optional;
 public class UserController {
 
 	private final UserService userService;
-	private final SpelAwareProxyProjectionFactory projectionFactory;
-
 	private static final Logger log = LogManager.getLogger(UserController.class);
 
-	public UserController(UserService userService, SpelAwareProxyProjectionFactory projectionFactory) {
+	public UserController(UserService userService) {
 		this.userService = userService;
-		this.projectionFactory = projectionFactory;
 	}
 
 	@GetMapping("id/{id}")
@@ -57,10 +54,10 @@ public class UserController {
 	}
 
 	private SimpleUser toSimpleUser(User user){
-		return projectionFactory.createProjection(SimpleUser.class, user);
+		return new SpelAwareProxyProjectionFactory().createProjection(SimpleUser.class, user);
 	}
 
 	private UserCreationResponse toUserResponse(User user){
-		return projectionFactory.createProjection(UserCreationResponse.class, user);
+		return new SpelAwareProxyProjectionFactory().createProjection(UserCreationResponse.class, user);
 	}
 }
