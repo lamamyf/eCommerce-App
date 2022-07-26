@@ -19,6 +19,16 @@ public class User {
 
 	private String password;
 
+	public User() {
+	}
+
+	public User(long id, String username, Cart cart, String password) {
+		this.id = id;
+		this.username = username;
+		this.cart = cart;
+		this.password = password;
+	}
+
 	public String getPassword() {
 		return password;
 	}

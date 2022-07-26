@@ -8,7 +8,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -25,7 +24,6 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ItemController.class)
-@AutoConfigureJsonTesters
 public class ItemControllerTest {
 
     private static final String FIND_ITEMS_URL = "/api/item";
@@ -40,7 +38,7 @@ public class ItemControllerTest {
 
     @Test
     @WithMockUser
-    public void findItemsTest() throws Exception {
+    public void findAllItemsTest() throws Exception {
         var items = List.of(getItem(1L));
         given(itemService.findAll()).willReturn(items);
 

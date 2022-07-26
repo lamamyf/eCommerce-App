@@ -6,8 +6,6 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 @Table(name = "cart")
 public class Cart {
@@ -22,7 +20,6 @@ public class Cart {
     private List<Item> items;
 	
 	@OneToOne(mappedBy = "cart")
-	@JsonIgnore
     private User user;
 	
 	@Column

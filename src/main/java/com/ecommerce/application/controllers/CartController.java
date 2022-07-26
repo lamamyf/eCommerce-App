@@ -16,11 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class CartController {
 	
 	private final CartService cartService;
-	private final SpelAwareProxyProjectionFactory projectionFactory;
 
-	public CartController(CartService cartService, SpelAwareProxyProjectionFactory projectionFactory) {
+	public CartController(CartService cartService) {
 		this.cartService = cartService;
-		this.projectionFactory = projectionFactory;
 	}
 
 	@PostMapping("/addToCart")
@@ -36,6 +34,6 @@ public class CartController {
 	}
 
 	private SimpleCart toSimpleCart(Cart cart){
-		return projectionFactory.createProjection(SimpleCart.class, cart);
+		return new SpelAwareProxyProjectionFactory().createProjection(SimpleCart.class, cart);
 	}
 }

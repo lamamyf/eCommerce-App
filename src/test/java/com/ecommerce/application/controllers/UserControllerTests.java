@@ -41,7 +41,7 @@ public class UserControllerTests {
     private MockMvc mockMvc;
 
     @Autowired
-    private JacksonTester<CreateUserRequest> json;
+    private JacksonTester<CreateUserRequest> jacksonTester;
 
     @MockBean
     private UserService userService;
@@ -55,7 +55,7 @@ public class UserControllerTests {
         User savedUser = getUser(1L, username, password, new Cart());
         given(userService.create(username, password)).willReturn(savedUser);
 
-        ResultActions resultActions = TestUtils.performPost(mockMvc, CREATE_USER_URL, json.write(request).getJson());
+        ResultActions resultActions = TestUtils.performPost(mockMvc, CREATE_USER_URL, jacksonTester.write(request).getJson());
 
         resultActions.andExpect(status().isOk());
 
@@ -74,7 +74,7 @@ public class UserControllerTests {
         var password = "123";
         var request = new CreateUserRequest(username, password, password);
 
-        ResultActions resultActions = TestUtils.performPost(mockMvc, CREATE_USER_URL, json.write(request).getJson());
+        ResultActions resultActions = TestUtils.performPost(mockMvc, CREATE_USER_URL, jacksonTester.write(request).getJson());
 
         resultActions.andExpect(status().isBadRequest());
     }
