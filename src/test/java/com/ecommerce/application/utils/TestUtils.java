@@ -17,6 +17,12 @@ public class TestUtils {
                 .accept(MediaType.APPLICATION_JSON));
     }
 
+    public static ResultActions performPost(MockMvc mockMvc, String url) throws Exception {
+        return mockMvc.perform(post(url).with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON));
+    }
+
     public static ResultActions performGet(MockMvc mockMvc, String url) throws Exception {
         return mockMvc.perform(get(url)
                 .contentType(MediaType.APPLICATION_JSON)

@@ -28,9 +28,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(CartController.class)
 @AutoConfigureJsonTesters
-public class CartControllerTest {
+public class CartControllerTests {
 
-    private final static String ADD_TO_CART_URL = "/api/cart/addToCart";
+    private final static String ADD_TO_CART_URL      = "/api/cart/addToCart";
     private final static String REMOVE_FROM_CART_URL = "/api/cart/removeFromCart";
 
     @Autowired

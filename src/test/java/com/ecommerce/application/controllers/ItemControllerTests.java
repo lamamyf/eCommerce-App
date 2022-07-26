@@ -24,10 +24,10 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ItemController.class)
-public class ItemControllerTest {
+public class ItemControllerTests {
 
-    private static final String FIND_ITEMS_URL = "/api/item";
-    private static final String FIND_BY_ID_URL = "/api/item/%d";
+    private static final String FIND_ITEMS_URL   = "/api/item";
+    private static final String FIND_BY_ID_URL   = "/api/item/%d";
     private static final String FIND_BY_NAME_URL = "/api/item/name/%s";
 
     @Autowired

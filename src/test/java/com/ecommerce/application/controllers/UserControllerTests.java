@@ -1,7 +1,7 @@
 package com.ecommerce.application.controllers;
 
 import com.ecommerce.application.utils.TestUtils;
-import com.ecommerce.application.utils.UserCreationResponseImpl;
+import com.ecommerce.application.utils.response.UserCreationResponseImpl;
 import com.ecommerce.application.core.security.SecurityConfig;
 import com.ecommerce.application.model.dto.CreateUserRequest;
 import com.ecommerce.application.model.dto.UserCreationResponse;
@@ -33,9 +33,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureJsonTesters
 public class UserControllerTests {
 
-    private static final String CREATE_USER_URL = "/api/user/create";
+    private static final String CREATE_USER_URL      = "/api/user/create";
     private static final String FIND_BY_USERNAME_URL = "/api/user/%s";
-    private static final String FIND_BY_ID_URL = "/api/user/id/%d";
+    private static final String FIND_BY_ID_URL       = "/api/user/id/%d";
 
     @Autowired
     private MockMvc mockMvc;

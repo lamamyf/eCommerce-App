@@ -18,11 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderController {
 	
 	private final OrderService orderService;
-	private final SpelAwareProxyProjectionFactory projectionFactory;
 
-	public OrderController(OrderService orderService, SpelAwareProxyProjectionFactory projectionFactory) {
+	public OrderController(OrderService orderService) {
 		this.orderService = orderService;
-		this.projectionFactory = projectionFactory;
 	}
 
 	@PostMapping("/submit/{username}")
@@ -41,6 +39,6 @@ public class OrderController {
 	}
 
 	private OrderResponse toOrderResponse(UserOrder order){
-		return projectionFactory.createProjection(OrderResponse.class, order);
+		return new SpelAwareProxyProjectionFactory().createProjection(OrderResponse.class, order);
 	}
 }

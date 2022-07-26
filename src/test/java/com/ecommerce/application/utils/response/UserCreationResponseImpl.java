@@ -1,4 +1,4 @@
-package com.ecommerce.application.utils;
+package com.ecommerce.application.utils.response;
 
 import com.ecommerce.application.model.dto.UserCreationResponse;
 
