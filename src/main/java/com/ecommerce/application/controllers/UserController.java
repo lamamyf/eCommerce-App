@@ -44,12 +44,12 @@ public class UserController {
 	@PostMapping("/create")
 	public ResponseEntity<UserCreationResponse> createUser(@RequestBody CreateUserRequest request) {
 		if(!request.password().equals(request.confirmPassword()) || request.password().length() < 7 ){
-			log.error("User {} Not Created because of invalid password", request.username());
+			log.error("User {} not created because of invalid password", request.username());
 			return ResponseEntity.badRequest().build();
 		}
 
 		User user = userService.create(request.username(), request.password());
-		log.info("New User: {}.", request.username());
+		log.info("New user: created {}.", request.username());
 		return ResponseEntity.ok(toUserResponse(user));
 	}
 

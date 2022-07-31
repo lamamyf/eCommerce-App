@@ -27,18 +27,24 @@ public class OrderService {
     public Optional<UserOrder> submit(String username) {
         var user = userService.findByUsername(username);
         if(user.isEmpty()) {
-            log.error("user not found for given username {}", username);
+            log.error("User not found for given username {}", username);
             return Optional.empty();
         }
 
         UserOrder order = orderRepository.save(UserOrder.createFromCart(user.get().getCart()));
-        log.info("New order: {}", order.getId());
+        log.info("New order submitted: {}", order.getId());
 
         return Optional.of(order);
     }
 
     public Optional<List<UserOrder>> findByUsername(String username) {
         var user = userService.findByUsername(username);
-        return user.isPresent() ? Optional.of(orderRepository.findByUser(user.get())) : Optional.empty();
+        if(user.isEmpty()){
+            log.error("User not found for given username {}", username);
+            return Optional.empty();
+        }
+        List<UserOrder> orders = orderRepository.findByUser(user.get());
+        log.info("Number of orders for user : {} is {}", username, orders.size());
+        return Optional.of(orders);
     }
 }

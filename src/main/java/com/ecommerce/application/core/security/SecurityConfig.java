@@ -2,6 +2,7 @@ package com.ecommerce.application.core.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configurers.CsrfConfig
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 @EnableWebSecurity
 @Configuration
@@ -36,7 +38,8 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 .addFilter(authenticationFilter)
                 .addFilter(verificationFilter)
-                .sessionManagement((s) -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(configurer -> configurer.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
 
         return http.build();
     }

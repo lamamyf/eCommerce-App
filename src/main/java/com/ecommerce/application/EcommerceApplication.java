@@ -5,8 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-//@EnableJpaRepositories("com.ecommerce.application.model.persistence.repositories")
-//@EntityScan("com.ecommerce.application.model.persistence")
 @SpringBootApplication
 public class EcommerceApplication {
 

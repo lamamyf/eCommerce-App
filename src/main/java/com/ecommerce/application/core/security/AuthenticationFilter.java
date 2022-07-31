@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ecommerce.application.model.persistence.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +24,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
+    private static final Logger log = LoggerFactory.getLogger(AuthenticationFilter.class);
 
     public AuthenticationFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
@@ -47,6 +51,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                             credentials.getPassword(),
                             new ArrayList<>()));
     	} catch (IOException e) {
+            log.error("AuthenticationFilter, attemptAuthentication, IOException: {}", e.getMessage());
     		throw new RuntimeException(e);
     	}
     }
